@@ -73,15 +73,15 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                    <th width="15%">Товар</th>
-                                    <th width="10%">Кількість</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="30%">Товар</th>
+                                    <th width="5%">Кількість</th>
+                                    <th width="15%" class="text-center">
                                         <t t-if="has_barcode">Штрихкод</t>
                                     </th>
                                     <th width="15%">
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Джерело</t>
                                     </th>
-                                    <th width="20%">
+                                    <th width="15%">
                                         <t t-if="has_serial_number">Партія/серійний номер</t>
                                     </th>
                                     <th width="20%" class="text-right">Призначення</th>
