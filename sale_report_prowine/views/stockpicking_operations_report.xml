@@ -2,19 +2,19 @@
 
 <odoo>
     <template id="report_picking_prowine" inherit_id="stock.report_picking">
-        <xpath expr="//t[@t-call='web.html_container']" position="replace">
+       <xpath expr="//t[@t-call='web.html_container']" position="replace">
             <t t-foreach="docs" t-as="o">
-                <t t-call="web.external_layout">
+                 <t t-call="web.basic_layout">
                     <div class="page">
                         <div class="row">
                             <div class="col-xs-6">
-                                <div t-if="o.move_lines and o.move_lines.partner_id and o.move_lines.partner_id.id != o.partner_id.id">
-                                    <span><strong>Delivery Address:</strong></span>
+                                <div t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
+                                    <span><strong>Адреса доставки:</strong></span>
                                     <div t-field="o.move_lines[0].partner_id"
                                          t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
                                 </div>
-                                <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines.partner_id) and o.picking_type_id.warehouse_id.partner_id">
-                                    <span><strong>Warehouse Address:</strong></span>
+                                <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
+                                    <span><strong>Адреса складу:</strong></span>
                                     <div t-field="o.picking_type_id.warehouse_id.partner_id"
                                          t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
                                 </div>
@@ -24,30 +24,28 @@
                                     <span><strong>Partner Address:</strong></span>
                                 </div>
                                 <div t-if="o.picking_type_id.code=='internal' and o.partner_id">
-                                    <span><strong>Warehouse Address:</strong></span>
+                                    <span><strong>Адреса складу:</strong></span>
                                 </div>
                                 <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
-                                    <span><strong>Customer Address:</strong></span>
+                                    <span><strong>Адреса клієнта:</strong></span>
                                 </div>
                                 <div t-if="o.partner_id" name="partner_header">
-                                    <div t-field="o.partner_id"
-                                         t-options='{"widget": "contact", "fields": ["name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                                    <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                                     <p t-if="o.sudo().partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.sudo().partner_id.vat"/></p>
                                 </div>
                             </div>
                         </div>
                         <br/>
-                        <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
-                             style="width:300px;height:50px" class="pull-right mb16"/>
+                        <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)" style="width:300px;height:50px" class="pull-right mb16"/>
                             <h1 t-field="o.name" class="mt0 pull-left"/>
                         <div class="clearfix"/>
                         <table class="table table-condensed">
                             <thead>
                                 <tr>
-                                    <th t-if="o.origin"><strong>Order (Origin)</strong></th>
-                                    <th><strong>State</strong></th>
-                                    <th><strong>Commitment Date</strong></th>
-                                    <th name="td_sched_date_h"><strong>Scheduled Date</strong></th>
+                                    <th t-if="o.origin"><strong>Замовлення (джерело)</strong></th>
+                                    <th><strong>Стан</strong></th>
+                                    <th><strong>Встановлений термін</strong></th>
+                                    <th name="td_sched_date_h"><strong>Запланована дата</strong></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,18 +72,18 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                    <th width="15%">Product</th>
-                                    <th width="10%">Quantity</th>
+                                    <th width="15%">Товар</th>
+                                    <th width="10%">Кількість</th>
                                     <th width="20%" class="text-center">
-                                        <t t-if="has_barcode">Barcode</t>
+                                        <t t-if="has_barcode">Штрихкод</t>
                                     </th>
                                     <th width="15%">
-                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
+                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Джерело</t>
                                     </th>
                                     <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                        <t t-if="has_serial_number">Партія/серійний номер</t>
                                     </th>
-                                    <th width="20%" class="text-right">Destination</th>
+                                    <th width="20%" class="text-right">Призначення</th>
                                 </tr>
                               </thead>
                                 <tbody>
@@ -143,15 +141,15 @@
                                                 </table>
                                             </t>
                                             <t t-else="">
-                                                <span>No reservation or quantity done yet.</span>
+                                                <span>Ніяких товарів не додано.</span>
                                             </t>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         <p t-if="o.state in ['draft', 'waiting', 'confirmed']">
-                            You do not have any products reserved for this picking.  Please click the 'Reserve' button
-                            to check if products are available.
+                            У вас немає продуктів, зарезервованих для цього вибору.
+                            Натисніть кнопку "Забронювати", щоб перевірити наявність продуктів.
                         </p>
                         <p t-field="o.note"/>
                     </div>
