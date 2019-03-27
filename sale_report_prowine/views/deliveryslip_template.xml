@@ -2,7 +2,8 @@
 
 <odoo>
     <data>
-        <template id="report_delivery_document_prowine" inherit_id="stock.report_inventory">
+        <template id="report_delivery_document_prowine" inherit_id="stock.report_delivery_document">
+            <xpath expr="//t[@t-call='web.html_container']" position="replace">
                 <t t-call="web.html_container">
                     <t t-call="web.external_layout">
                     <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
@@ -10,7 +11,7 @@
                         <div class="row" name="customer_address">
                             <div class="col-xs-4 pull-right">
                                 <div>
-                                    <span><strong>Customer Address:</strong></span>
+                                    <span><strong>Адреса клієнта:</strong></span>
                                 </div>
                                 <div t-if="o.move_lines and o.move_lines[0].partner_id" name="partner_header">
                                     <div t-field="o.move_lines[0].partner_id"
@@ -28,9 +29,9 @@
                         <table class="table table-condensed">
                             <thead>
                                 <tr>
-                                    <th t-if="o.origin"><strong>Order (Origin)</strong></th>
+                                    <th t-if="o.origin"><strong>Замовлення (джерело)</strong></th>
                                     <th name="td_sched_date_h">
-                                        <strong>Date</strong>
+                                        <strong>Дата</strong>
                                     </th>
                                 </tr>
                             </thead>
@@ -53,8 +54,8 @@
                         <table class="table table-condensed mt48" t-if="not o.move_line_ids">
                             <thead>
                                 <tr>
-                                    <th><strong>Product</strong></th>
-                                    <th><strong>Reserved</strong></th>
+                                    <th><strong>Товар</strong></th>
+                                    <th><strong>Замовлено</strong></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,13 +73,13 @@
                             <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
                             <thead>
                                 <tr>
-                                    <th><strong>Product</strong></th>
+                                    <th><strong>Товар</strong></th>
                                     <th name="lot_serial" t-if="has_serial_number">
-                                        Lot/Serial Number
+                                        Партія/серійний номер
                                     </th>
-                                    <th class="text-center"><strong>Reserved</strong></th>
+                                    <th class="text-center"><strong>Замовлено</strong></th>
                                     <th t-if="any([move_line.state == 'done' for move_line in o.move_line_ids])" class="text-right">
-                                            <strong>Delivered Quantity</strong>
+                                            <strong>Доставлена кількість</strong>
                                     </th>
                                 </tr>
                             </thead>
@@ -127,16 +128,17 @@
                             </tbody>
                         </table>
                         <p t-if="o.backorder_id">
-                            This shipment is a backorder of <t t-esc="o.backorder_id.name"/>.
+                            Ця відвантаження є замовленням <t t-esc="o.backorder_id.name"/>.
                         </p>
                         <p>
                             <t t-if="backorder">
-                                All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
+                                Неможливо відвантажити всі елементи, решта буде відправлено відразу після їх появи.
                             </t>
                         </p>
                     </div>
                     </t>
                 </t>
+            </xpath>
         </template>
     </data>
 </odoo>
