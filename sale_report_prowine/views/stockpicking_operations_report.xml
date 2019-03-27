@@ -2,9 +2,10 @@
 
 <odoo>
     <template id="report_picking_prowine" inherit_id="stock.report_picking">
-       <xpath expr="//t[@t-call='web.html_container']" position="replace">
-            <t t-foreach="docs" t-as="o">
-                 <t t-call="web.basic_layout">
+ <xpath expr="//t[@t-call='web.html_container']" position="replace">
+            <t t-call="web.html_container">
+                 <t t-call="web.external_layout">
+                      <t t-foreach="docs" t-as="o">
                     <div class="page">
                         <div class="row">
                             <div class="col-xs-6">
@@ -148,12 +149,13 @@
                                 </tbody>
                             </table>
                         <p t-if="o.state in ['draft', 'waiting', 'confirmed']">
-                            У вас немає продуктів, зарезервованих для цього вибору.
+                            У вас немає продуктів, зарезервованих для цього вибору. 
                             Натисніть кнопку "Забронювати", щоб перевірити наявність продуктів.
                         </p>
                         <p t-field="o.note"/>
                     </div>
                 </t>
+            </t>
             </t>
         </xpath>
     </template>
