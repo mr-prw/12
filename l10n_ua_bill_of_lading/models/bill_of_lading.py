@@ -46,7 +46,7 @@ class StockPicking(models.Model):
                                              string='Вид перевезень')
     expeditor_id = fields.Many2one('res.partner', string='Експедитор')
     driver_id = fields.Many2one('res.partner', string='Водій')
-    customer = fields.Many2one('res.partner', string='Заказчик')
+    customer = fields.Many2one('res.partner', string='Клієнт')
     consignor = fields.Many2one('res.partner', string='Вантажовідправник')
     consignee = fields.Many2one('res.partner', string='Вантажоодержувач')
     accountant = fields.Many2one('res.partner', string='Бухгалтер')
